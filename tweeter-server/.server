@@ -1,5 +1,5 @@
-BUCKET='cs340tannerengland'
-LAMBDA_ROLE='arn:aws:iam::194722415156:role/cs340project'
+BUCKET='my-tweeter-bucket1'
+LAMBDA_ROLE='arn:aws:iam::539247486164:role/MSroleTHREE'
 EDIT_LAMBDALIST='
 tweeterGetFollowees | lambda/follow/GetFolloweesLambda.handler
 tweeterGetFollowers | lambda/follow/GetFollowersLambda.handler
@@ -17,4 +17,4 @@ tweeterLogins | lambda/user/LoginLambda.handler
 tweeterRegister | lambda/user/RegisterLambda.handler
 '
 
-LAMBDALAYER_ARN='arn:aws:lambda:us-east-2:194722415156:layer:tweeterLambdaLayer:17'
+LAMBDALAYER_ARN='arn:aws:lambda:us-east-2:539247486164:layer:ms3Layer:3'
