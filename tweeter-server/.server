@@ -1,0 +1,20 @@
+BUCKET='cs340tannerengland'
+LAMBDA_ROLE='arn:aws:iam::194722415156:role/cs340project'
+EDIT_LAMBDALIST='
+tweeterGetFollowees | lambda/follow/GetFolloweesLambda.handler
+tweeterGetFollowers | lambda/follow/GetFollowersLambda.handler
+tweeterGetStories | lambda/status/GetStoriesLambda.handler
+tweeterGetFeed | lambda/status/GetFeedLambda.handler
+tweeterPostStatus | lambda/status/PostStatusLambda.handler
+tweeterGetIsFollowerStatus | lambda/follow/GetIsFollowerStatusLambda.handler
+tweeterGetFolloweeCount | lambda/follow/GetFolloweeCountLambda.handler
+tweeterGetFollowerCount | lambda/follow/GetFollowerCountLambda.handler
+tweeterFollow | lambda/follow/FollowLambda.handler
+tweeterUnfollow | lambda/follow/UnfollowLambda.handler
+tweeterGetUser | lambda/user/GetUserLambda.handler
+tweeterLogout | lambda/user/LogoutLambda.handler
+tweeterLogins | lambda/user/LoginLambda.handler
+tweeterRegister | lambda/user/RegisterLambda.handler
+'
+
+LAMBDALAYER_ARN='arn:aws:lambda:us-east-2:194722415156:layer:tweeterLambdaLayer:17'
