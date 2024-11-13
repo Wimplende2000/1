@@ -1,0 +1,715 @@
+openapi: 3.0.1
+info:
+  title: Tweeter API
+  description: API for Tweeter app features.
+  version: 1.0.0
+servers:
+  - url: https://YOUR_API_GATEWAY_URL
+    description: AWS API Gateway URL
+paths:
+  /user/register:
+    post:
+      summary: Register a new user
+      description: Registers a new user and returns an authentication token.
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  auth_token:
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: Bad Request - Missing or invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input data"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterRegister/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /user/login:
+    post:
+      summary: Login a user
+      description: Authenticates a user and provides an authentication token.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auth_token:
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: Bad Request - Missing or invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid credentials"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterLogins/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /user/logout:
+    post:
+      summary: Logout a user
+      description: Logs out a user, invalidating the authentication token.
+      operationId: logoutUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad Request - Invalid authentication token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid authentication token"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterLogout/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /status/postStatus:
+    post:
+      summary: Post a status
+      description: Allows a user to post a new status.
+      operationId: postStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                status_text:
+                  type: string
+                timestamp:
+                  type: string
+      responses:
+        '200':
+          description: Status posted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_id:
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: Bad Request - Missing or invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input data"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterPostStatus/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /follow/follow:
+    post:
+      summary: Follow a user
+      description: Allows a user to follow another user.
+      operationId: followUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                followee_id:
+                  type: string
+      responses:
+        '200':
+          description: Followed user successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad Request - Missing or invalid followee ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid followee ID"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterFollow/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /follow/unfollow:
+    post:
+      summary: Unfollow a user
+      description: Allows a user to unfollow another user.
+      operationId: unfollowUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                followee_id:
+                  type: string
+      responses:
+        '200':
+          description: Unfollowed user successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad Request - Missing or invalid followee ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid followee ID"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterUnfollow/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /user/getFollowers:
+    post:
+      summary: Get list of followers
+      description: Fetch a list of users that follow the given user.
+      operationId: getFollowers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                user_id:
+                  type: string
+                limit:
+                  type: integer
+                last_follower_id:
+                  type: string
+      responses:
+        '200':
+          description: List of followers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  followers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user_id:
+                          type: string
+                        name:
+                          type: string
+                  has_more:
+                    type: boolean
+                    example: true
+        '400':
+          description: Bad Request - Missing or invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid user ID or pagination data"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterGetFollowers/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /user/getFollowees:
+    post:
+      summary: Get list of users followed
+      description: Fetch a list of users that the given user follows.
+      operationId: getFollowees
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                user_id:
+                  type: string
+                limit:
+                  type: integer
+                last_followee_id:
+                  type: string
+      responses:
+        '200':
+          description: List of followees retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  followees:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user_id:
+                          type: string
+                        name:
+                          type: string
+                  has_more:
+                    type: boolean
+                    example: true
+        '400':
+          description: Bad Request - Missing or invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid user ID or pagination data"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterGetFollowees/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /user/isFollowing:
+    post:
+      summary: Check if a user follows another
+      description: Checks if one user is following another user.
+      operationId: isFollowing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                follower_id:
+                  type: string
+                followee_id:
+                  type: string
+      responses:
+        '200':
+          description: Successfully checked follow status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  is_following:
+                    type: boolean
+                    example: true
+        '400':
+          description: Bad Request - Missing or invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid user ID"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterGetIsFollowerStatus/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /status/getUserStory:
+    post:
+      summary: Get user's story
+      description: Retrieve statuses posted by a user, in reverse chronological order.
+      operationId: getUserStory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                user_id:
+                  type: string
+                limit:
+                  type: integer
+                last_status_id:
+                  type: string
+      responses:
+        '200':
+          description: Successfully retrieved user's story
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status_id:
+                          type: string
+                        content:
+                          type: string
+                        timestamp:
+                          type: string
+                  has_more:
+                    type: boolean
+        '400':
+          description: Bad Request - Invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid user ID or status information"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterGetStories/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /status/getFeed:
+    post:
+      summary: Get user's feed
+      description: Retrieve statuses posted by the users followed by the given user.
+      operationId: getFeed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                user_id:
+                  type: string
+                limit:
+                  type: integer
+                last_status_id:
+                  type: string
+      responses:
+        '200':
+          description: Successfully retrieved user's feed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statuses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status_id:
+                          type: string
+                        content:
+                          type: string
+                        timestamp:
+                          type: string
+                  has_more:
+                    type: boolean
+        '400':
+          description: Bad Request - Invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid user ID or status information"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterGetFeed/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE
+
+  /status/deleteStatus:
+    post:
+      summary: Delete a status
+      description: Allows a user to delete one of their statuses.
+      operationId: deleteStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_token:
+                  type: string
+                status_id:
+                  type: string
+      responses:
+        '200':
+          description: Status deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad Request - Missing or invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid status ID"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Server error, please try again later"
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:539247486164:function:tweeterDeleteStatus/invocations
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        type: "aws_proxy"
+        credentials: arn:aws:iam::539247486164:role/MSroleTHREE

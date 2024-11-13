@@ -27,7 +27,7 @@ import {
 import { ClientCommunicator } from "./ClientCommunicator";
 
 export class ServerFacade {
-  private SERVER_URL = "https://j5cqzfbiee.execute-api.us-east-2.amazonaws.com/dev";
+  private SERVER_URL = "https://s6sb33qay7.execute-api.us-east-2.amazonaws.com/dev";
   private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
 
   private handleErrors<T>(response: TweeterResponse, onSuccess: () => T): T {
